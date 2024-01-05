@@ -3,7 +3,7 @@ import SwiftUI
 struct ScorecardView: View {
     @ObservedObject var gameVM: GameViewModel
     @Binding var currentScreen: Int
-    @State var currentGuess: Int? = nil
+    @State var currentGuess: Int = 0
     @State var isGameOver: Bool = false
     var body: some View {
         VStack {
@@ -72,56 +72,51 @@ struct ScorecardView: View {
             // 2 play round
             // 3 enter actual scores for all players
             // 4 end round and start new round
-            gameVM.pl
+            
             if gameVM.players.count > 0 {
                 Button(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)") {
                     // Check if current position has a round for players
-                    print("test")
-                    if gameVM.gameState == .enteringGuesses {
-                        // enter numbers for predictions until players are done guessing
-                        var newRound = Round(predictedScore: currentGuess)
-                        ayers[gameVM.currentPosition].rounds.append(newRound)
-                        currentGuess = nil
-                        
-                        if gameVM.currentPosition + 1 >= gameVM.players.count {
-                            gameVM.currentPosition = 1
-                        } else {
-                            gameVM.currentPosition += 1
-                        }
-                    } else {
-                        // Entering actual numbers
-                        gameVM.players[gameVM.currentPosition].rounds[gameVM.currentRound].actualScore = currentGuess
-                        currentGuess = nil
-                        if gameVM.currentPosition + 1 >= gameVM.players.count {
-                            gameVM.currentPosition = 1
-                            // check if game is over
-                            if gameVM.currentRound + 1 >= gameVM.calculatedRoundArray.count {
-                                // Game Over
-                                isGameOver = true
-                            } else {
-                                gameVM.currentRound += 1
-                            }
-                            
-                        } else {
-                            gameVM.currentPosition += 1
-                        }
-                    }
+                    print("current guess \(currentGuess)")
+                    
                 }
                 .buttonStyle(.bordered)
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(.gray, lineWidth: 5)
-
-                    TextField(gameVM.gameState == .enteringGuesses ? "Guess" : "Score", value: $currentGuess, formatter: NumberFormatter())
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .foregroundColor(.gray)
-                        .font(.title)
-                        .fontWeight(.heavy)
-      
+                HStack {
+                    ForEach(0...gameVM.calculatedRoundArray[gameVM.currentRound], id: \.self) { number in
+                        Button {
+                            if gameVM.gameState == .enteringGuesses {
+                                // enter numbers for predictions until players are done guessing
+                                var newRound = Round(predictedScore: number)
+                                gameVM.players[gameVM.currentPosition].rounds.append(newRound)
+                                
+                                if gameVM.currentPosition + 1 >= gameVM.players.count {
+                                    gameVM.currentPosition = 1
+                                } else {
+                                    gameVM.currentPosition += 1
+                                }
+                            } else {
+                                // Entering actual numbers
+                                gameVM.players[gameVM.currentPosition].rounds[gameVM.currentRound].actualScore = number
+                                if gameVM.currentPosition + 1 >= gameVM.players.count {
+                                    gameVM.currentPosition = 1
+                                    // check if game is over
+                                    if gameVM.currentRound + 1 >= gameVM.calculatedRoundArray.count {
+                                        // Game Over
+                                        isGameOver = true
+                                    } else {
+                                        gameVM.currentRound += 1
+                                    }
+                                    
+                                } else {
+                                    gameVM.currentPosition += 1
+                                }
+                            }
+                        } label: {
+                            Text(number, format: .number)
+                        }
+                        .buttonStyle(.bordered)
+                    }
                 }
-                .fixedSize()
+               
             }
         }
     }
