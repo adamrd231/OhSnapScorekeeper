@@ -8,10 +8,10 @@ class GameViewModel: ObservableObject {
     var startingNumber: Int = 7
     var calculatedRoundArray: [Int] {
         var returnedArray:[Int] = []
-        for number in (0...startingNumber).reversed() {
+        for number in (1...startingNumber).reversed() {
             returnedArray.append(number)
         }
-        for number in (1...startingNumber) {
+        for number in (2...startingNumber) {
             returnedArray.append(number)
         }
         return returnedArray

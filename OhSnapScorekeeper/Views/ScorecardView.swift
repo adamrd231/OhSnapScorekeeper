@@ -7,9 +7,15 @@ struct ScorecardView: View {
     @State var isGameOver: Bool = false
     var body: some View {
         VStack {
-            Button("All done!") { currentScreen = 0 }
-            Text("Current Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
+            HStack {
+                Button("All done") { currentScreen = 0 }
+                Spacer()
+            }
+            .padding(.horizontal)
+           Spacer()
+            Text("Oh Snap!")
                 .font(.title)
+                .bold()
             HStack(alignment: .top) {
                 HStack(alignment: .top, spacing: 30) {
                     ForEach(gameVM.players, id: \.id) { player in
@@ -72,14 +78,12 @@ struct ScorecardView: View {
             // 2 play round
             // 3 enter actual scores for all players
             // 4 end round and start new round
-            
+
             if gameVM.players.count > 0 {
-                Button(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)") {
-                    // Check if current position has a round for players
-                    print("current guess \(currentGuess)")
-                    
-                }
-                .buttonStyle(.bordered)
+                Text("Current Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
+                Text(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)")
+                    .bold()
+
                 HStack {
                     ForEach(0...gameVM.calculatedRoundArray[gameVM.currentRound], id: \.self) { number in
                         Button {
@@ -116,7 +120,7 @@ struct ScorecardView: View {
                         .buttonStyle(.bordered)
                     }
                 }
-               
+                Spacer()
             }
         }
     }
