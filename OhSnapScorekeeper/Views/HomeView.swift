@@ -30,10 +30,9 @@ struct HomeView: View {
             )
         } else if currentScreen == 2 {
             ScorecardView(
-                currentScreen: $currentScreen,
-                gameVM: gameVM
+                gameVM: gameVM,
+                currentScreen: $currentScreen
             )
-  
         }
     }
 }
