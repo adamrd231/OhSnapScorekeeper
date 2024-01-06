@@ -5,18 +5,22 @@ struct ScorecardTableView: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(alignment: .top, spacing: 30) {
+            HStack(alignment: .top, spacing: 25) {
                 ForEach(gameVM.players, id: \.id) { player in
                     VStack(spacing: 10) {
                         // Player
-                        Text(player.name)
-                            .bold()
+                        if player.name != "Round" {
+                            Text(player.name)
+                                .bold()
+                        }
+                        
                         // Zip round array with indices for access to arrays
                         ForEach(Array(zip(gameVM.calculatedRoundArray.indices, gameVM.calculatedRoundArray)), id: \.0) { index, item in
                             HStack {
                                 if player.name == "Round" {
                                     Text("\(item)")
                                 }
+                                
                                 if player.name != "Round" {
                                     // Get first guess and actual round
                                     if index >= player.rounds.startIndex && index < player.rounds.count {

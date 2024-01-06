@@ -16,7 +16,9 @@ class DeveloperPreview {
         let player2 = Player(name: "Albus", position: 2)
         let player3 = Player(name: "Becky", position: 3)
         let player4 = Player(name: "Hudson", position: 4)
-        let player5 = Player(name: "Maggie", position: 1)
+        let player5 = Player(name: "Maggie", position: 5)
+        let player6 = Player(name: "Maizey", position: 6)
+        let player7 = Player(name: "Tim", position: 7)
         
         
         gameVM.players.append(player1)
@@ -24,6 +26,8 @@ class DeveloperPreview {
         gameVM.players.append(player3)
         gameVM.players.append(player4)
         gameVM.players.append(player5)
+        gameVM.players.append(player6)
+        gameVM.players.append(player7)
     }
     
 }
