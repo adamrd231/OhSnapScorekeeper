@@ -6,35 +6,55 @@ struct AddPlayersView: View {
     @State var playerName: String = ""
     
     var body: some View {
-        VStack {
+        VStack(spacing: 25) {
             HStack {
                 Button("Home") {
                     currentScreen = 0
                 }
                 Spacer()
-                Button("Ready") {
-                    currentScreen = 2
-                }
             }
-            Text("Add Players")
-                .font(.title)
+            .padding()
             
-            ForEach(gameVM.players, id: \.id) { player in
-                HStack {
-                    Text(player.position + 1, format: .number)
-                    Text(player.name)
-                }
-            }
+            Spacer()
+            
             
             TextField("Add player", text: $playerName)
+                .multilineTextAlignment(.center)
+                .padding()
+                .font(.title)
             
-            Button("Add player") {
-                if playerName != "" {
-                    let newPlayer = Player(name: playerName, position: gameVM.players.count)
-                    gameVM.players.append(newPlayer)
-                    playerName = ""
+            VStack(spacing: 5) {
+                List(gameVM.players, id: \.id) { player in
+                    if player.name != "Round" {
+                        HStack {
+                            Text(player.position, format: .number)
+                            Text(":")
+                            Text(player.name)
+                        }
+                    }
                 }
             }
+            
+            
+            VStack(spacing: 10) {
+                Button("Add player") {
+                    if playerName != "" {
+                        let newPlayer = Player(name: playerName, position: gameVM.players.count)
+                        gameVM.players.append(newPlayer)
+                        playerName = ""
+                    }
+                }
+                .buttonStyle(.bordered)
+                
+                Button("Start Game") {
+                    currentScreen = 2
+                }
+                .disabled(gameVM.players.count < 3)
+                .buttonStyle(.borderedProminent)
+
+            }
+            
+            Spacer()
          }
     }
 }

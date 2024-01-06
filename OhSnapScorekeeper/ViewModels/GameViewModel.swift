@@ -41,7 +41,6 @@ class GameViewModel: ObservableObject {
                 if filtered.count == 0 {
                     isRoundOver = true
                 }
-                print("filtered \(filtered.count)")
 
                 if isRoundOver {
                     self?.gameState = .enteringActuals
