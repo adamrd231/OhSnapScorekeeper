@@ -23,11 +23,52 @@ class GameViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     
     @Published var gameState: GameStates = .enteringGuesses
+    @Published var isGameOver: Bool = false
     
     init() {
         addSubscibers()
     }
     
+    func enterGuess(_ number: Int) {
+        // Create new round for the guess
+        // Only init guess, user will update with score later
+        var newRound = Round(predictedScore: number)
+        // Append Round to player that made the guess
+        players[currentPosition].rounds.append(newRound)
+        
+        // Check that there is another player to move to, otherwise reset to beginning position for entering scores
+        if currentPosition + 1 >= players.count {
+            currentPosition = 1
+        } else {
+            currentPosition += 1
+        }
+    }
+    
+    func enterActual(_ number: Int) {
+        // Entering actual numbers
+        players[currentPosition].rounds[currentRound].actualScore = number
+        if currentPosition + 1 >= players.count {
+            currentPosition = 1
+            // check if game is over
+            if currentRound + 1 >= calculatedRoundArray.count {
+                // Game Over
+                isGameOver = true
+            } else {
+                currentRound += 1
+            }
+            
+        } else {
+            currentPosition += 1
+        }
+    }
+    
+    func rewind() {
+        // get current round and Position
+        // reverse back one position
+        if currentPosition - 1 < 0 {
+          
+        }
+    }
     
     func addSubscibers() {
         $players

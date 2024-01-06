@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		667FAC142B45B804004615C8 /* AddPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC132B45B804004615C8 /* AddPlayersView.swift */; };
 		667FAC172B45C3FC004615C8 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC162B45C3FC004615C8 /* Preview.swift */; };
+		667FAC192B49C650004615C8 /* ScorecardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC182B49C650004615C8 /* ScorecardTableView.swift */; };
 		668276262B446E7700B5B548 /* OhSnapScorekeeperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668276252B446E7700B5B548 /* OhSnapScorekeeperApp.swift */; };
 		668276282B446E7700B5B548 /* ScorecardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668276272B446E7700B5B548 /* ScorecardView.swift */; };
 		6682762A2B446E7800B5B548 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 668276292B446E7800B5B548 /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		667FAC132B45B804004615C8 /* AddPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayersView.swift; sourceTree = "<group>"; };
 		667FAC162B45C3FC004615C8 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		667FAC182B49C650004615C8 /* ScorecardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorecardTableView.swift; sourceTree = "<group>"; };
 		668276222B446E7700B5B548 /* OhSnapScorekeeper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OhSnapScorekeeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		668276252B446E7700B5B548 /* OhSnapScorekeeperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhSnapScorekeeperApp.swift; sourceTree = "<group>"; };
 		668276272B446E7700B5B548 /* ScorecardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorecardView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				668276342B44A81900B5B548 /* HomeView.swift */,
 				668276272B446E7700B5B548 /* ScorecardView.swift */,
 				667FAC132B45B804004615C8 /* AddPlayersView.swift */,
+				667FAC182B49C650004615C8 /* ScorecardTableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				667FAC192B49C650004615C8 /* ScorecardTableView.swift in Sources */,
 				668276352B44A81900B5B548 /* HomeView.swift in Sources */,
 				668276282B446E7700B5B548 /* ScorecardView.swift in Sources */,
 				668276392B44AA8E00B5B548 /* OhSnapGame.swift in Sources */,
