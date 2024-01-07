@@ -1,6 +1,10 @@
 import Foundation
 
-struct Player {
+struct Player: Identifiable, Equatable {
+    static func == (lhs: Player, rhs: Player) -> Bool {
+        lhs.position > rhs.position
+    }
+    
     let id = UUID()
     let name: String
     let position: Int

@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 class GameViewModel: ObservableObject {
     var ohSnapGame = OhSnapGame()
@@ -27,6 +28,10 @@ class GameViewModel: ObservableObject {
     
     init() {
         addSubscibers()
+    }
+    
+    func scrollTo(_ proxy: ScrollViewProxy, with item: UUID) {
+        proxy.scrollTo(item)
     }
     
     func enterGuess(_ number: Int) {
