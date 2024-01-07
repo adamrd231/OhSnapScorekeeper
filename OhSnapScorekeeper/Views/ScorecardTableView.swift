@@ -22,9 +22,12 @@ struct ScorecardTableView: View {
                                     isSelected: gameVM.currentRound == index
                                 )
                                 .onChange(of: gameVM.players) { newValue in
-                                    if let lastPlayer = gameVM.players.last {
-                                        gameVM.scrollTo(proxy, with: lastPlayer.id)
+                                    // Use the position to get the player id for scrolling to
+                                    if let player = gameVM.players.first(where: { $0.position == gameVM.currentPosition }) {
+                                        gameVM.scrollTo(proxy, with: player.id)
                                     }
+                                   
+                                    
                                    
                                 }
                             }
