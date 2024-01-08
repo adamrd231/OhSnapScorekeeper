@@ -9,28 +9,31 @@ struct ScorecardView: View {
         VStack {
             // Table for showing scorecard
             ScorecardTableView(gameVM: gameVM)
+                .onChange(of: gameVM.isGameRunning, perform: { isGameRunning in
+                    UIApplication.shared.isIdleTimerDisabled = isGameRunning
+                })
 
-            if gameVM.players.count > 0 {
-                Text("Current Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
-                Text(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)")
-                    .bold()
+            Text("Current Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
+            Text(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)")
+                .bold()
 
-                HStack {
-                    ForEach(0...gameVM.calculatedRoundArray[gameVM.currentRound], id: \.self) { number in
-                        Button {
-                            if gameVM.gameState == .enteringGuesses {
-                                gameVM.enterGuess(number)
-                            } else {
-                                gameVM.enterActual(number)
-                            }
-     
-                        } label: {
-                            Text(number, format: .number)
+            HStack {
+                ForEach(0...gameVM.calculatedRoundArray[gameVM.currentRound], id: \.self) { number in
+                    Button {
+                        if gameVM.gameState == .enteringGuesses {
+                            gameVM.enterGuess(number)
+                        } else {
+                            gameVM.enterActual(number)
                         }
-                        .buttonStyle(.bordered)
+ 
+                    } label: {
+                        Text(number, format: .number)
                     }
+                    .buttonStyle(.bordered)
                 }
             }
+            
+            Spacer()
         }
     }
 }

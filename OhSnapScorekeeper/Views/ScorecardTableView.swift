@@ -6,9 +6,9 @@ struct ScorecardTableView: View {
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal) {
-                HStack(alignment: .top, spacing: 25) {
+                HStack(alignment: .center) {
                     ForEach(gameVM.players, id: \.id) { player in
-                        VStack(spacing: 10) {
+                        VStack {
                             // Player
                             if player.name == "Round" {
                                 Text(player.name)
@@ -16,7 +16,6 @@ struct ScorecardTableView: View {
                             } else {
                                 Text(player.name)
                             }
-                           
                             
                             // Zip round array with indices for access to arrays
                             ForEach(Array(zip(gameVM.calculatedRoundArray.indices, gameVM.calculatedRoundArray)), id: \.0) { index, score in
@@ -34,7 +33,7 @@ struct ScorecardTableView: View {
                                     }
                                 }
                             }
-                           
+                            
                             VStack {
                                 if player.name != "Round" {
                                     Text(player.totalScore, format: .number)
@@ -45,11 +44,13 @@ struct ScorecardTableView: View {
                             .padding(.top)
                         }
                         .id(player.id)
+                        .padding(.horizontal)
                     }
                 }
                 .padding()
-                .background(.gray.opacity(0.2))
             }
+            .fixedSize(horizontal: false, vertical: true)
+            .background(.gray.opacity(0.2))
         }
     }
 }
@@ -90,6 +91,7 @@ struct PlayerScoresView: View {
                 }
             }
         }
+
         .font(isSelected ? .title2 : .body)
         .opacity(isSelected ? 1.0 : 0.8)
     }

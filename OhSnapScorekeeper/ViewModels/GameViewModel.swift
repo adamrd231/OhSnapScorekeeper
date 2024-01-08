@@ -24,7 +24,8 @@ class GameViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     
     @Published var gameState: GameStates = .enteringGuesses
-    @Published var isGameOver: Bool = false
+    @Published var isGameRunning: Bool = true
+   
     
     init() {
         addSubscibers()
@@ -57,7 +58,7 @@ class GameViewModel: ObservableObject {
             // check if game is over
             if currentRound + 1 >= calculatedRoundArray.count {
                 // Game Over
-                isGameOver = true
+                isGameRunning = false
             } else {
                 currentRound += 1
             }

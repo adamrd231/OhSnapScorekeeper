@@ -4,6 +4,7 @@ struct AddPlayersView: View {
     @Binding var currentScreen: Screens
     @ObservedObject var gameVM: GameViewModel
     @State var playerName: String = ""
+    @State var startingNumber: Int = 7
     
     func delete(at offsets: IndexSet) {
         gameVM.players.remove(atOffsets: offsets)
@@ -69,6 +70,21 @@ struct AddPlayersView: View {
                 }
                 .disabled(gameVM.players.count < 3)
                 .buttonStyle(.borderedProminent)
+                
+                VStack {
+                    Text("Starting # of cards")
+                        .bold()
+                    Picker("Starting Number", selection: $startingNumber) {
+                        ForEach(0..<8) { index in
+                            Text(index, format: .number)
+                        }
+                    }
+                    .onChange(of: startingNumber, perform: { starting in
+                        gameVM.startingNumber = starting
+                    })
+                    .pickerStyle(.segmented)
+                }
+                .padding()
             }
             Spacer()
         }
