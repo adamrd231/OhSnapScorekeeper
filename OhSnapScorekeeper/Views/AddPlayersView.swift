@@ -17,44 +17,42 @@ struct AddPlayersView: View {
     }
     
     var body: some View {
-        VStack(spacing: 25) {
-            HStack {
-                Button("Home") {
-                    currentScreen = .home
-                }
+        NavigationStack {
+            VStack(spacing: 25) {
                 Spacer()
-            }
-            .padding()
-            
-            Spacer()
-            
-            
-            TextField("Add player", text: $playerName)
-                .multilineTextAlignment(.center)
-                .padding()
-                .font(.title)
-            
-            VStack(spacing: 5) {
-                NavigationStack {
-                    List {
-                        ForEach(gameVM.players, id: \.id) { player in
-                            if player.name != "Round" {
-                                HStack {
-                                    Text(player.position, format: .number)
-                                    Text(":")
-                                    Text(player.name)
-                                }
+                
+                TextField("Player name", text: $playerName)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .font(.title)
+                    .background(Color.gray.opacity(0.15))
+                
+                List {
+                    ForEach(gameVM.players, id: \.id) { player in
+                        if player.name != "Round" {
+                            HStack {
+                                Text(player.position, format: .number)
+                                Text(":")
+                                Text(player.name)
                             }
                         }
-                        .onDelete(perform: delete)
-                        .onMove(perform: move)
                     }
-                    .toolbar {
+                    .onDelete(perform: delete)
+                    .onMove(perform: move)
+                }
+                .navigationTitle("Add players")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Back") {
+                            currentScreen = .home
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
                 }
-                .listStyle(.plain)
             }
+            .listStyle(.plain)
             
             VStack(spacing: 10) {
                 Button("Add player") {
@@ -73,7 +71,7 @@ struct AddPlayersView: View {
                 .buttonStyle(.borderedProminent)
             }
             Spacer()
-         }
+        }
     }
 }
 
