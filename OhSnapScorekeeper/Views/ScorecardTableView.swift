@@ -10,7 +10,13 @@ struct ScorecardTableView: View {
                     ForEach(gameVM.players, id: \.id) { player in
                         VStack(spacing: 10) {
                             // Player
-                            Text(player.name)
+                            if player.name == "Round" {
+                                Text(player.name)
+                                    .fontWeight(.light)
+                            } else {
+                                Text(player.name)
+                            }
+                           
                             
                             // Zip round array with indices for access to arrays
                             ForEach(Array(zip(gameVM.calculatedRoundArray.indices, gameVM.calculatedRoundArray)), id: \.0) { index, score in
@@ -26,9 +32,6 @@ struct ScorecardTableView: View {
                                     if let player = gameVM.players.first(where: { $0.position == gameVM.currentPosition }) {
                                         gameVM.scrollTo(proxy, with: player.id)
                                     }
-                                   
-                                    
-                                   
                                 }
                             }
                            
@@ -66,6 +69,7 @@ struct PlayerScoresView: View {
         HStack {
             if player.name == "Round" {
                 Text("\(score)")
+                    .fontWeight(.light)
             }
             
             if player.name != "Round" {
@@ -82,7 +86,7 @@ struct PlayerScoresView: View {
                         Text("_")
                     }
                 } else {
-                    Text("_")
+                    Text("-")
                 }
             }
         }

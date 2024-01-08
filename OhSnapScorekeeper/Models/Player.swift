@@ -6,8 +6,8 @@ struct Player: Identifiable, Equatable {
     }
     
     let id = UUID()
-    let name: String
-    let position: Int
+    var name: String
+    var position: Int
     var rounds: [Round] = []
     
     var totalScore: Int {

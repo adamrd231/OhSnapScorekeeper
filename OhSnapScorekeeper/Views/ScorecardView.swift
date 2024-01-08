@@ -2,23 +2,11 @@ import SwiftUI
 
 struct ScorecardView: View {
     @ObservedObject var gameVM: GameViewModel
-    @Binding var currentScreen: Int
+    @Binding var currentScreen: Screens
     @State var currentGuess: Int = 0
 
     var body: some View {
         VStack {
-            HStack {
-                Button("All done") { currentScreen = 0 }
-                Spacer()
-            }
-            .padding(.horizontal)
-            
-           Spacer()
-            
-            Text("Oh Snap!")
-                .font(.title)
-                .bold()
-
             // Table for showing scorecard
             ScorecardTableView(gameVM: gameVM)
 
@@ -42,7 +30,6 @@ struct ScorecardView: View {
                         .buttonStyle(.bordered)
                     }
                 }
-                Spacer()
             }
         }
     }
@@ -52,7 +39,7 @@ struct ScorecardView_Previews: PreviewProvider {
     static var previews: some View {
         ScorecardView(
             gameVM: dev.gameVM,
-            currentScreen: .constant(2)
+            currentScreen: .constant(.scorecardView)
 
         )
     }
