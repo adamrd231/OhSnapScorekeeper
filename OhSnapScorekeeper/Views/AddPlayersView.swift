@@ -9,6 +9,13 @@ struct AddPlayersView: View {
         gameVM.players.remove(atOffsets: offsets)
     }
     
+    func move(from source: IndexSet, to destination: Int) {
+        gameVM.players.move(fromOffsets: source, toOffset: destination)
+        for index in 0..<gameVM.players.count {
+            gameVM.players[index].position = index
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 25) {
             HStack {
@@ -28,25 +35,22 @@ struct AddPlayersView: View {
                 .font(.title)
             
             VStack(spacing: 5) {
-                List {
-                    ForEach(gameVM.players, id: \.id) { player in
-                        if player.name != "Round" {
-                            HStack {
-                                Text(player.position, format: .number)
-                                Text(":")
-                                Text(player.name)
+                NavigationStack {
+                    List {
+                        ForEach(gameVM.players, id: \.id) { player in
+                            if player.name != "Round" {
+                                HStack {
+                                    Text(player.position, format: .number)
+                                    Text(":")
+                                    Text(player.name)
+                                }
                             }
                         }
+                        .onDelete(perform: delete)
+                        .onMove(perform: move)
                     }
-                    .onDelete(perform: delete)
-                    .onMove { from, to in
-                        print("Moving from \(from) to \(to)")
-                        // Update position for item
-                        for (index, item) in gameVM.players.enumerated() {
-//                            if let playerIndex = gameVM.players.firstIndex(where: { $0.id == item.id }) {
-//                                gameVM.players[playerIndex].position = index
-//                            }
-                        }
+                    .toolbar {
+                        EditButton()
                     }
                 }
                 .listStyle(.plain)
