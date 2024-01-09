@@ -24,6 +24,10 @@ class DeveloperPreview {
         gameVM.players.append(player1)
         gameVM.players.append(player2)
         gameVM.players.append(player3)
+        gameVM.players.append(player4)
+        gameVM.players.append(player5)
+        gameVM.players.append(player6)
+        gameVM.players.append(player7)
  
     }
     

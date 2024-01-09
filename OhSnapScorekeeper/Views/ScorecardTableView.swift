@@ -8,7 +8,7 @@ struct ScorecardTableView: View {
     let tableHeight: Double
     
     func scrollTo(_ proxy: ScrollViewProxy, with item: UUID) {
-        proxy.scrollTo(item)
+        proxy.scrollTo(item, anchor: .center)
     }
     
     var body: some View {
@@ -36,11 +36,17 @@ struct ScorecardTableView: View {
                                     tableHeight: tableHeight,
                                     roundCount: calculatedRoundArray.count
                                 )
+                                .id(player.id)
                                 .onChange(of: players) { newValue in
                                     // Use the position to get the player id for scrolling to
-                                    if let player = players.first(where: { $0.position == currentPosition }) {
+                                    print("Update position")
+                                    if let player = players.first(where: { $0.position == currentPosition + 1 }) {
                                         scrollTo(proxy, with: player.id)
+                                        print("Update position 2")
+                                    } else if let playerID = players.first {
+                                        scrollTo(proxy, with: playerID.id)
                                     }
+                            
                                 }
                             }
                            
@@ -53,7 +59,7 @@ struct ScorecardTableView: View {
                             }
                             .bold()
                         }
-                        .id(player.id)
+                       
                         .padding(.trailing, player.name != "Round" ? 20 : 0)
                     }
                 }
