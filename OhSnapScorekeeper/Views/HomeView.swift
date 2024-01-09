@@ -10,15 +10,33 @@ struct LaunchView: View {
     @Binding var currentScreen: Screens
     
     var body: some View {
-        VStack {
-            // Setup game screen
-            Text("Oh Snap Scorekeeper").font(.title)
-            Button("Start Game") {
-                currentScreen = .updatePlayers
+        ZStack {
+            ZStack {
+                Image("cards")
+                    .resizable()
+                    .scaledToFill()
+                Rectangle()
+                    .opacity(0.8)
             }
-            // Play game (one person)
-            // Play game with friends (everyone fills out their own numbers)
+            .edgesIgnoringSafeArea(.all)
+                
+            
+            VStack {
+                // Setup game screen
+                Text("Oh Snap Scorekeeper")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                Button("Setup game scorecard") {
+                    currentScreen = .updatePlayers
+                }
+                .buttonStyle(.borderedProminent)
+                // Play game (one person)
+                // Play game with friends (everyone fills out their own numbers)
+            }
+          
         }
+       
     }
 }
 

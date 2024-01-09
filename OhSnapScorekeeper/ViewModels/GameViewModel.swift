@@ -31,6 +31,14 @@ class GameViewModel: ObservableObject {
         addSubscibers()
     }
     
+    func resetGame() {
+        for index in 0..<players.count {
+            players[index].rounds.removeAll()
+        }
+        currentRound = 0
+        currentPosition = 1
+    }
+    
     func rewindGame() {
         // Checking if rewinding takes us back one round
         if currentPosition - 1 < 1 {
