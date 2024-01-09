@@ -5,10 +5,7 @@ struct ScorecardTableView: View {
     let calculatedRoundArray: [Int]
     let currentRound: Int
     let currentPosition: Int
-    
-    var rows: [GridItem] = [
-        GridItem(.flexible())
-    ]
+    let tableHeight: Double
     
     func scrollTo(_ proxy: ScrollViewProxy, with item: UUID) {
         proxy.scrollTo(item)
@@ -19,7 +16,7 @@ struct ScorecardTableView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 5) {
                     ForEach(players, id: \.id) { player in
-                        VStack {
+                        VStack(spacing: 0) {
                             // Player
                             if player.name == "Round" {
                                 Text(player.name)
@@ -35,7 +32,9 @@ struct ScorecardTableView: View {
                                     player: player,
                                     index: index,
                                     score: score,
-                                    isSelected: currentRound == index && currentPosition == player.position
+                                    isSelected: currentRound == index && currentPosition == player.position,
+                                    tableHeight: tableHeight,
+                                    roundCount: calculatedRoundArray.count
                                 )
                                 .onChange(of: players) { newValue in
                                     // Use the position to get the player id for scrolling to
@@ -44,7 +43,7 @@ struct ScorecardTableView: View {
                                     }
                                 }
                             }
-                            
+                           
                             VStack {
                                 if player.name != "Round" {
                                     Text(player.totalScore, format: .number)
@@ -53,17 +52,13 @@ struct ScorecardTableView: View {
                                 }
                             }
                             .bold()
-                            .padding(.top, 5)
                         }
                         .id(player.id)
                         .padding(.trailing, player.name != "Round" ? 20 : 0)
                     }
                 }
-                .padding()
             }
-            .fixedSize(horizontal: false, vertical: true)
-            .padding()
-            .background(.gray.opacity(0.1))
+            .padding(5)
         }
     }
 }
@@ -72,9 +67,10 @@ struct ScorecardTableView_Previews: PreviewProvider {
     static var previews: some View {
         ScorecardTableView(
             players: dev.gameVM.players,
-            calculatedRoundArray: [1, 2, 3, 4, 3, 2, 1],
+            calculatedRoundArray: [7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, 7],
             currentRound: 0,
-            currentPosition: 1
+            currentPosition: 1,
+            tableHeight: 200
         )
     }
 }
@@ -84,6 +80,8 @@ struct PlayerScoresView: View {
     let index: Int
     let score: Int
     let isSelected: Bool
+    let tableHeight: Double
+    let roundCount: Int
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -111,20 +109,13 @@ struct PlayerScoresView: View {
                     }
                 }
             }
-            .padding(3)
+            .frame(height: tableHeight / (Double(roundCount) + 2))
             .frame(minWidth: 60)
-            if isSelected {
-                Rectangle()
-                    .foregroundColor(.blue)
-                    .frame(height: 2, alignment: .top)
-            } else if player.name != "Round" {
-                Rectangle()
-                    .foregroundColor(.gray)
-                    .frame(height: 2, alignment: .top)
-            } else {
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(height: 2, alignment: .top)
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(.blue.opacity(0.24))
+                }
             }
         }
         .cornerRadius(5)
