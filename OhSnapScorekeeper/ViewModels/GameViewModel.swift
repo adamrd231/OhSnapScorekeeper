@@ -31,10 +31,6 @@ class GameViewModel: ObservableObject {
         addSubscibers()
     }
     
-    func scrollTo(_ proxy: ScrollViewProxy, with item: UUID) {
-        proxy.scrollTo(item)
-    }
-    
     func enterGuess(_ number: Int) {
         // Create new round for the guess
         // Only init guess, user will update with score later

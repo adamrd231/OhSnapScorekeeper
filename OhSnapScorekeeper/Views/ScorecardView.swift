@@ -8,12 +8,19 @@ struct ScorecardView: View {
     var body: some View {
         VStack {
             // Table for showing scorecard
-            ScorecardTableView(gameVM: gameVM)
+            ScorecardTableView(
+                players: gameVM.players,
+                calculatedRoundArray: gameVM.calculatedRoundArray,
+                currentRound: gameVM.currentRound,
+                currentPosition: gameVM.currentPosition
+            )
+                .padding(.bottom)
                 .onChange(of: gameVM.isGameRunning, perform: { isGameRunning in
                     UIApplication.shared.isIdleTimerDisabled = isGameRunning
                 })
 
             Text("Current Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
+                .font(.title2)
             Text(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)")
                 .bold()
 
