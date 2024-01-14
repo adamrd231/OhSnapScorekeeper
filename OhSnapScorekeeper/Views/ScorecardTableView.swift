@@ -12,59 +12,40 @@ struct ScorecardTableView: View {
     }
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal) {
-                HStack(spacing: 5) {
-                    ForEach(players, id: \.id) { player in
-                        VStack(spacing: 0) {
-                            // Player
-                            if player.name == "Round" {
-                                Text(player.name)
-                                    .fontWeight(.light)
-                            } else {
-                                Text(player.name)
-                            }
-                            
-                            // Zip round array with indices for access to arrays
-                            ForEach(Array(zip(calculatedRoundArray.indices, calculatedRoundArray)), id: \.0) { index, score in
-                                // Player Scores
-                                PlayerScoresView(
-                                    player: player,
-                                    index: index,
-                                    score: score,
-                                    isSelected: currentRound == index && currentPosition == player.position,
-                                    tableHeight: tableHeight,
-                                    roundCount: calculatedRoundArray.count
-                                )
-                                .id(player.id)
-                                .onChange(of: players) { newValue in
-                                    // Use the position to get the player id for scrolling to
-                                    print("Update position")
-                                    if let player = players.first(where: { $0.position == currentPosition + 1 }) {
-                                        scrollTo(proxy, with: player.id)
-                                        print("Update position 2")
-                                    } else if let playerID = players.first {
-                                        scrollTo(proxy, with: playerID.id)
-                                    }
-                            
-                                }
-                            }
-                           
-                            VStack {
-                                if player.name != "Round" {
-                                    Text(player.totalScore, format: .number)
-                                } else {
-                                    Text("Total")
-                                }
-                            }
+        ScrollView {
+        HStack(spacing: 10) {
+            ForEach(players, id: \.id) { player in
+
+                VStack(spacing: 10) {
+                        Text(player.name)
                             .bold()
+                        ForEach(player.rounds, id: \.id) { round in
+                            HStack {
+                                if let guess = round.predictedScore {
+                                    Text(guess, format: .number)
+                                } else {
+                                    Text("-")
+      
+                                }
+                                if let actual = round.actualScore {
+                                    Text(actual, format: .number)
+                                } else {
+                                    Text("-")
+     
+                                        
+                                }
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50)
+                            .background(.white)
+                            .cornerRadius(9)
+                            .shadow(color: .gray, radius: 5)
                         }
-                       
-                        .padding(.trailing, player.name != "Round" ? 20 : 0)
+                        .frame(minWidth: 0, maxWidth: .infinity)
                     }
                 }
+                
+             
             }
-            .padding(5)
         }
     }
 }
@@ -81,50 +62,38 @@ struct ScorecardTableView_Previews: PreviewProvider {
     }
 }
 
+
+// TODO: Build GeometryReader modifier to size the height
 struct PlayerScoresView: View {
     let player: Player
-    let index: Int
-    let score: Int
     let isSelected: Bool
-    let tableHeight: Double
-    let roundCount: Int
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                if player.name == "Round" {
-                    Text("\(score)")
-                        .fontWeight(.light)
-                }
-                
-                if player.name != "Round" {
-                    // Get first guess and actual round
-                    if index >= player.rounds.startIndex && index < player.rounds.count {
-                        if let predictedScore = player.rounds[index].predictedScore {
-                            Text(predictedScore, format: .number)
-                        }
-                        Text("|")
-                        if let actualScore = player.rounds[index].actualScore {
-                            Text(actualScore, format: .number)
-                            
-                        } else {
-                            Text("_")
-                            
-                        }
-                    } else {
-                        Text("-")
+                // Get first guess and actual round
+                if player.position >= player.rounds.startIndex && player.position < player.rounds.count {
+                    if let predictedScore = player.rounds[player.position].predictedScore {
+                        Text(predictedScore, format: .number)
                     }
-                }
-            }
-            .frame(height: tableHeight / (Double(roundCount) + 2))
-            .frame(minWidth: 60)
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(.blue.opacity(0.24))
+                    Text("|")
+                    if let actualScore = player.rounds[player.position].actualScore {
+                        Text(actualScore, format: .number)
+                        
+                    } else {
+                        Text("_")
+                        
+                    }
+                } else {
+                    Text("-")
                 }
             }
         }
-        .cornerRadius(5)
-        .opacity(isSelected ? 1.0 : 0.8)
+        .frame(minWidth: 60)
+        .overlay {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundColor(.blue.opacity(0.24))
+            }
+        }
     }
 }

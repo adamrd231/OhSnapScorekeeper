@@ -2,7 +2,7 @@ import Foundation
 
 struct Round {
     let id = UUID()
-    let predictedScore: Int?
+    var predictedScore: Int?
     var actualScore: Int?
     
     init(predictedScore: Int? = nil, actualScore: Int? = nil) {

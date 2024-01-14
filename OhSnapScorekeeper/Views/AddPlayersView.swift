@@ -66,6 +66,8 @@ struct AddPlayersView: View {
                 .buttonStyle(.bordered)
                 
                 Button("Start Game") {
+                    // Create array for player scores here
+                    gameVM.prepGameScoreCard()
                     currentScreen = .scorecardView
                 }
                 .disabled(gameVM.players.count < 3)

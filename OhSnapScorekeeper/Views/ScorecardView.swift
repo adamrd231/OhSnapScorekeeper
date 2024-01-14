@@ -52,6 +52,12 @@ struct ScorecardView: View {
                             }
                         }
                         .buttonStyle(.borderedProminent)
+                        
+                        Button("Test") {
+                            gameVM.players[0].position = 3
+
+                           
+                        }
                         Spacer()
                     }
                     .frame(height: geo.size.height * 0.3)
@@ -72,10 +78,8 @@ struct ScorecardView: View {
                         gameVM.resetGame()
                     }
                 }
-               
             }
         }
-        
     }
 }
 

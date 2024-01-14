@@ -5,7 +5,7 @@ import SwiftUI
 class GameViewModel: ObservableObject {
     var ohSnapGame = OhSnapGame()
     
-    @Published var players: [Player] = [Player(name: "Round", position: 0)]
+    @Published var players: [Player] = []
     var startingNumber: Int = 7
     var calculatedRoundArray: [Int] {
         var returnedArray:[Int] = []
@@ -19,29 +19,24 @@ class GameViewModel: ObservableObject {
     }
     
     @Published var currentRound: Int = 0
-    @Published var currentPosition: Int = 1
+    @Published var currentPosition: Int = 0
     
     private var cancellable = Set<AnyCancellable>()
     
     @Published var gameState: GameStates = .enteringGuesses
     @Published var isGameRunning: Bool = true
-   
-    
-    init() {
-        addSubscibers()
-    }
     
     func resetGame() {
         for index in 0..<players.count {
             players[index].rounds.removeAll()
         }
         currentRound = 0
-        currentPosition = 1
+        currentPosition = 0
     }
     
     func rewindGame() {
         // Checking if rewinding takes us back one round
-        if currentPosition - 1 < 1 {
+        if currentPosition - 1 < 0 {
 
             // Checking if we are just at the beginning
             if currentRound - 1 < 0 {
@@ -74,60 +69,52 @@ class GameViewModel: ObservableObject {
         
     }
     
-    func enterGuess(_ number: Int) {
-        // Create new round for the guess
-        // Only init guess, user will update with score later
-        let newRound = Round(predictedScore: number)
-        // Append Round to player that made the guess
-        players[currentPosition].rounds.append(newRound)
+    func enterGuess(_ guess: Int) {
+        // Check if there is a guess
+        if players[currentPosition].rounds[currentRound].predictedScore == nil {
+           // make guess
+            players[currentPosition].rounds[currentRound].predictedScore = guess
         
-        // Check that there is another player to move to, otherwise reset to beginning position for entering scores
-        if currentPosition + 1 >= players.count {
-            currentPosition = 1
-        } else {
-            currentPosition += 1
-        }
-    }
-    
-    func enterActual(_ number: Int) {
-        // Entering actual numbers
-        players[currentPosition].rounds[currentRound].actualScore = number
-        if currentPosition + 1 >= players.count {
-            currentPosition = 1
-            // check if game is over
-            if currentRound + 1 >= calculatedRoundArray.count {
-                // Game Over
-                isGameRunning = false
+            if currentPosition + 1 >= players.count {
+                currentPosition = 0
+                gameState = .enteringActuals
             } else {
-                currentRound += 1
+                currentPosition += 1
+          
             }
-            
-        } else {
-            currentPosition += 1
         }
     }
     
-    func addSubscibers() {
-        $players
-            .combineLatest($currentRound)
-            .sink { [weak self] players, currentRound in
-                var isRoundOver = false
-
-                let removedRoundPlayer = players.filter({ $0.name != "Round" })
-                
-                let filtered = removedRoundPlayer.filter({ $0.rounds.count != currentRound + 1 })
-                if filtered.count == 0 {
-                    isRoundOver = true
-                }
-
-                if isRoundOver {
-                    self?.gameState = .enteringActuals
+    func enterActual(_ score: Int) {
+        // Entering actual numbers
+        if players[currentPosition].rounds[currentRound].actualScore == nil {
+            players[currentPosition].rounds[currentRound].actualScore = score
+            
+            if currentPosition + 1 >= players.count {
+                currentPosition = 0
+                gameState = .enteringGuesses
+                // check if game is over
+                if currentRound + 1 >= calculatedRoundArray.count {
+                    // Game Over
+                    isGameRunning = false
                 } else {
-                    self?.gameState = .enteringGuesses
+                    currentRound += 1
+        
                 }
                 
+            } else {
+                currentPosition += 1
             }
-            .store(in: &cancellable)
+        }
+    }
+    
+    func prepGameScoreCard() {
+        // Each player needs as many empty Round objects as there are rounds in calculcated round array
+        for playerIndex in 0..<players.count {
+            for _ in 0..<calculatedRoundArray.count {
+                players[playerIndex].rounds.append(Round())
+            }
+        }
 
     }
     
