@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		664F0BCD2B55C17A002D1E2A /* IndividualRoundScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664F0BCC2B55C17A002D1E2A /* IndividualRoundScore.swift */; };
+		664F0BCF2B55C1A2002D1E2A /* PlayerNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664F0BCE2B55C1A2002D1E2A /* PlayerNameView.swift */; };
+		664F0BD12B55C1BD002D1E2A /* RoundNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664F0BD02B55C1BD002D1E2A /* RoundNumberView.swift */; };
 		667FAC142B45B804004615C8 /* AddPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC132B45B804004615C8 /* AddPlayersView.swift */; };
 		667FAC172B45C3FC004615C8 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC162B45C3FC004615C8 /* Preview.swift */; };
 		667FAC192B49C650004615C8 /* ScorecardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667FAC182B49C650004615C8 /* ScorecardTableView.swift */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		664F0BCC2B55C17A002D1E2A /* IndividualRoundScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualRoundScore.swift; sourceTree = "<group>"; };
+		664F0BCE2B55C1A2002D1E2A /* PlayerNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNameView.swift; sourceTree = "<group>"; };
+		664F0BD02B55C1BD002D1E2A /* RoundNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundNumberView.swift; sourceTree = "<group>"; };
 		667FAC132B45B804004615C8 /* AddPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayersView.swift; sourceTree = "<group>"; };
 		667FAC162B45C3FC004615C8 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		667FAC182B49C650004615C8 /* ScorecardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorecardTableView.swift; sourceTree = "<group>"; };
@@ -129,6 +135,9 @@
 				668276272B446E7700B5B548 /* ScorecardView.swift */,
 				667FAC132B45B804004615C8 /* AddPlayersView.swift */,
 				667FAC182B49C650004615C8 /* ScorecardTableView.swift */,
+				664F0BCC2B55C17A002D1E2A /* IndividualRoundScore.swift */,
+				664F0BCE2B55C1A2002D1E2A /* PlayerNameView.swift */,
+				664F0BD02B55C1BD002D1E2A /* RoundNumberView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -207,9 +216,12 @@
 				668276352B44A81900B5B548 /* HomeView.swift in Sources */,
 				668276282B446E7700B5B548 /* ScorecardView.swift in Sources */,
 				668276392B44AA8E00B5B548 /* OhSnapGame.swift in Sources */,
+				664F0BCF2B55C1A2002D1E2A /* PlayerNameView.swift in Sources */,
 				667FAC142B45B804004615C8 /* AddPlayersView.swift in Sources */,
 				6682763B2B44AA9F00B5B548 /* Player.swift in Sources */,
+				664F0BCD2B55C17A002D1E2A /* IndividualRoundScore.swift in Sources */,
 				6682763D2B44AAB100B5B548 /* Round.swift in Sources */,
+				664F0BD12B55C1BD002D1E2A /* RoundNumberView.swift in Sources */,
 				668276262B446E7700B5B548 /* OhSnapScorekeeperApp.swift in Sources */,
 				667FAC172B45C3FC004615C8 /* Preview.swift in Sources */,
 				668276402B44AACF00B5B548 /* GameViewModel.swift in Sources */,
