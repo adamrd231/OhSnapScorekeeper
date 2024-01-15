@@ -21,10 +21,10 @@ struct ScorecardTableView: View {
             ScrollView {
                 HStack(spacing: 10) {
                     VStack(spacing: 10) {
-                        ForEach(calculatedRoundArray, id: \.self) { round in
+                        ForEach(Array(zip(calculatedRoundArray.indices, calculatedRoundArray)), id: \.0) { index, round in
                             RoundNumberView(
                                 roundNumber: round,
-                                isSelected: round == calculatedRoundArray[currentRound]
+                                isSelected: currentRound == index
                             )
                         }
                     }

@@ -20,6 +20,7 @@ class GameViewModel: ObservableObject {
     
     @Published var currentRound: Int = 0
     @Published var currentPosition: Int = 0
+    @Published var dealerPosition: Int = 0
     
     private var cancellable = Set<AnyCancellable>()
     
@@ -28,7 +29,10 @@ class GameViewModel: ObservableObject {
     
     func resetGame() {
         for index in 0..<players.count {
-            players[index].rounds.removeAll()
+            for roundIndex in 0..<players[index].rounds.count {
+                players[index].rounds[roundIndex].predictedScore = nil
+                players[index].rounds[roundIndex].actualScore = nil
+            }
         }
         currentRound = 0
         currentPosition = 0
@@ -77,33 +81,53 @@ class GameViewModel: ObservableObject {
         
             if currentPosition + 1 >= players.count {
                 currentPosition = 0
-                gameState = .enteringActuals
             } else {
                 currentPosition += 1
           
+            }
+            
+            let playersGuessing = players.filter({ $0.rounds[currentRound].predictedScore == nil })
+            if playersGuessing.count == 0 {
+                gameState = .enteringActuals
             }
         }
     }
     
     func enterActual(_ score: Int) {
-        // Entering actual numbers
+        // Check if current position has a score, if not
         if players[currentPosition].rounds[currentRound].actualScore == nil {
+            // Enter score
             players[currentPosition].rounds[currentRound].actualScore = score
             
-            if currentPosition + 1 >= players.count {
-                currentPosition = 0
+            // Check if that was the last score we needed and if we should switch back to guessing
+            let playersEnteringScores = players.filter({ $0.rounds[currentRound].actualScore == nil })
+            
+            // If no more players entering scores
+            if playersEnteringScores.count == 0 {
+                // Go back to guessing
                 gameState = .enteringGuesses
-                // check if game is over
                 if currentRound + 1 >= calculatedRoundArray.count {
                     // Game Over
                     isGameRunning = false
                 } else {
                     currentRound += 1
-        
+                    // Update dealer position
+                    if dealerPosition + 1 >= players.count {
+                        dealerPosition = 0
+                    } else {
+                        dealerPosition += 1
+                    }
+                    // Update current position with the correct starting place
+                    currentPosition = dealerPosition
                 }
-                
             } else {
-                currentPosition += 1
+                // Still players entering scores
+                // Update player position
+                if currentPosition + 1 >= players.count {
+                    currentPosition = 0
+                } else {
+                    currentPosition += 1
+                }
             }
         }
     }
