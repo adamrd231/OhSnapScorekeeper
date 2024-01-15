@@ -40,29 +40,7 @@ class GameViewModel: ObservableObject {
     
     func rewindGame() {
         // Checking if rewinding takes us back one round
-        if currentPosition - 1 < 0 {
-
-            // Checking if we are just at the beginning
-            if currentRound - 1 < 0 {
-                if gameState == .enteringActuals {
-                    currentPosition = players.count - 1
-                    gameState = .enteringGuesses
-                    deleteEntry(deleting: gameState)
-                }
-            } else {
-                // If we aren't go back a round and reset position to the end
-                if gameState == .enteringGuesses {
-                    currentRound -= 1
-                } else {
-                    gameState = .enteringGuesses
-                }
-                currentPosition = players.count - 1
-                deleteEntry(deleting: gameState)
-            }
-        } else {
-            currentPosition -= 1
-            deleteEntry(deleting: gameState)
-        }
+        
     }
     
     func deleteEntry(deleting: GameStates) {
