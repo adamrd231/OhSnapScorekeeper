@@ -3,6 +3,7 @@ import SwiftUI
 struct ScorecardView: View {
     @ObservedObject var gameVM: GameViewModel
     @Binding var currentScreen: Screens
+    @State var isResettingGame: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -63,9 +64,13 @@ struct ScorecardView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Reset scores") {
-                        gameVM.resetGame()
+                        isResettingGame.toggle()
                     }
                 }
+            }
+            .alert("Reset Scores", isPresented: $isResettingGame) {
+                Button("Do it") { gameVM.resetGame() }
+                Button("Cancel", role: .cancel) {}
             }
         }
     }
