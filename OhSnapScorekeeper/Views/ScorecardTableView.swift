@@ -12,41 +12,54 @@ struct ScorecardTableView: View {
     }
     
     var body: some View {
-        ScrollView {
-        HStack(spacing: 10) {
-            ForEach(players, id: \.id) { player in
-
-                VStack(spacing: 10) {
-                        Text(player.name)
-                            .bold()
-                        ForEach(player.rounds, id: \.id) { round in
-                            HStack {
-                                if let guess = round.predictedScore {
-                                    Text(guess, format: .number)
-                                } else {
-                                    Text("-")
-      
-                                }
-                                if let actual = round.actualScore {
-                                    Text(actual, format: .number)
-                                } else {
-                                    Text("-")
-     
-                                        
-                                }
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50)
-                            .background(.white)
-                            .cornerRadius(9)
-                            .shadow(color: .gray, radius: 5)
-                        }
+        VStack {
+            HStack {
+                ForEach(players, id: \.id) { player in
+                    Text(player.name)
                         .frame(minWidth: 0, maxWidth: .infinity)
+                        .font(.caption)
+                }
+            }
+
+            ScrollView {
+                HStack(spacing: 10) {
+                    ForEach(players, id: \.id) { player in
+                        VStack(spacing: 10) {
+                            ForEach(player.rounds, id: \.id) { round in
+                                HStack {
+                                    IndividualRoundScore(score: round.predictedScore)
+                                    IndividualRoundScore(score: round.actualScore)
+                                }
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50)
+                                .background(.white)
+                                .cornerRadius(9)
+                                .shadow(color: .gray, radius: 3)
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                        }
                     }
                 }
-                
-             
             }
         }
+        .padding()
+    }
+}
+
+struct IndividualRoundScore: View {
+    
+    let score: Int?
+    init(score: Int? = nil) {
+        self.score = score
+    }
+    
+    var body: some View {
+        if let scoreAvailable = score {
+            Text(scoreAvailable, format: .number)
+        } else {
+            Text("-")
+
+        }
+      
     }
 }
 
