@@ -39,14 +39,67 @@ class GameViewModel: ObservableObject {
     }
     
     func rewindGame() {
-        // Checking if rewinding takes us back one round
+        switch gameState {
+        // Currently entering guesses
+        case .enteringGuesses:
+            // If nothing guesses on row so far..
+
+            if players.filter({ $0.rounds[currentRound].predictedScore != nil }).count == 0 {
+                print("No entries")
+                currentRound -= 1
+                currentPosition = players.count - 1
+                gameState = .enteringActuals
+                deleteEntry()
+
+                dealerPosition -= 1
+                return
+            }
+            
+            
+            if currentPosition - 1 < 0 {
+                if currentRound - 1 < 0 {
+                    print("At the beginning")
+                } else {
+                    currentRound -= 1
+                    currentPosition = players.count - 1
+                    gameState = .enteringActuals
+                    deleteEntry()
+                }
+            } else {
+                currentPosition -= 1
+                deleteEntry()
+            }
+        // Currently entering a score
+        case .enteringActuals:
+            print("Entering score")
+            if currentPosition - 1 < 0 {
+                gameState = .enteringGuesses
+                currentPosition = players.count - 1
+            } else {
+                currentPosition -= 1
+            }
+            deleteEntry()
+        }
         
     }
     
-    func deleteEntry(deleting: GameStates) {
-        switch deleting {
-        case .enteringGuesses: players[currentPosition].rounds.removeLast()
-        case .enteringActuals: players[currentPosition].rounds[currentRound].actualScore = nil
+    func updateGameState() {
+        let playersGuessing = players.filter({ $0.rounds[currentRound].predictedScore == nil })
+        if playersGuessing.count == 0 {
+            gameState = .enteringActuals
+        } else {
+            gameState = .enteringGuesses
+        }
+    }
+    
+    func deleteEntry() {
+        switch gameState {
+        case .enteringGuesses:
+            print("Delete guess")
+            players[currentPosition].rounds[currentRound].predictedScore = nil
+        case .enteringActuals:
+            print("Delete score")
+            players[currentPosition].rounds[currentRound].actualScore = nil
         }
         
     }
@@ -56,19 +109,15 @@ class GameViewModel: ObservableObject {
         if players[currentPosition].rounds[currentRound].predictedScore == nil {
            // make guess
             players[currentPosition].rounds[currentRound].predictedScore = guess
-        
-            if currentPosition + 1 >= players.count {
-                currentPosition = 0
-            } else {
-                currentPosition += 1
-          
-            }
-            
-            let playersGuessing = players.filter({ $0.rounds[currentRound].predictedScore == nil })
-            if playersGuessing.count == 0 {
-                gameState = .enteringActuals
-            }
         }
+        
+        // Update player position
+        if currentPosition + 1 >= players.count {
+            currentPosition = 0
+        } else {
+            currentPosition += 1
+        }
+        updateGameState()
     }
     
     func enterActual(_ score: Int) {
@@ -89,10 +138,13 @@ class GameViewModel: ObservableObject {
                     isGameRunning = false
                 } else {
                     currentRound += 1
+                    print("Dealer score: \(dealerPosition)")
                     // Update dealer position
                     if dealerPosition + 1 >= players.count {
+                        print("Dealer position 0")
                         dealerPosition = 0
                     } else {
+                        print("Add one to dealer position")
                         dealerPosition += 1
                     }
                     // Update current position with the correct starting place

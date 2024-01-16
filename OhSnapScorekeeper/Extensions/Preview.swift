@@ -15,13 +15,13 @@ class DeveloperPreview {
     private init() {
 
         gameVM.startingNumber = 7
-        var player1 = Player(name: "Lola", position: 1)
-        var player2 = Player(name: "Albus", position: 2)
-        var player3 = Player(name: "Becky", position: 3)
-        var player4 = Player(name: "Hudson", position: 4)
-        var player5 = Player(name: "Maggie", position: 5)
-        var player6 = Player(name: "Maizey", position: 6)
-        var player7 = Player(name: "Tim", position: 7)
+        var player1 = Player(name: "Lola", position: 0)
+        var player2 = Player(name: "Albus", position: 1)
+        var player3 = Player(name: "Becky", position: 2)
+        var player4 = Player(name: "Hudson", position: 3)
+        var player5 = Player(name: "Maggie", position: 4)
+        var player6 = Player(name: "Maizey", position: 5)
+        var player7 = Player(name: "Tim", position: 6)
 
         
         gameVM.players.append(player1)

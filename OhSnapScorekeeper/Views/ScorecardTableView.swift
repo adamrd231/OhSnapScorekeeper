@@ -25,13 +25,13 @@ struct ScorecardTableView: View {
                     HStack(spacing: 10) {
                         ForEach(players, id: \.id) { player in
                             VStack(spacing: 10) {
-                                ForEach(player.rounds, id: \.id) { round in
+                                ForEach(Array(zip(player.rounds.indices, player.rounds)), id: \.0) { index, round in
                                     HStack {
-                                        IndividualRoundScore(score: round.predictedScore)
-                                        IndividualRoundScore(score: round.actualScore)
+                                        IndividualRoundScore(round.predictedScore)
+                                        IndividualRoundScore(round.actualScore)
                                     }
                                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50)
-                                    .background(.white)
+                                    .background((currentPosition == player.position && currentRound == index) ? .blue.opacity(0.2) : .white)
                                     .cornerRadius(10)
                                     .shadow(color: .gray.opacity(0.5), radius: 3)
                                 }

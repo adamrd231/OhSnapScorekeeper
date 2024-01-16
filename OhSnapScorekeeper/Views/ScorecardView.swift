@@ -7,7 +7,7 @@ struct ScorecardView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 20) {
                 // Table for showing scorecard
                 ScorecardTableView(
                     players: gameVM.players,
@@ -20,10 +20,11 @@ struct ScorecardView: View {
                 .onChange(of: gameVM.isGameRunning, perform: { isGameRunning in
                     UIApplication.shared.isIdleTimerDisabled = isGameRunning
                 })
+                
                 VStack {
-                    Spacer()
                     Text("Round: \(gameVM.calculatedRoundArray[gameVM.currentRound])")
                         .font(.title2)
+                        .fontWeight(.bold)
                     Text(gameVM.gameState == .enteringGuesses ? "Enter guess for \(gameVM.players[gameVM.currentPosition].name)" : "Enter score for \(gameVM.players[gameVM.currentPosition].name)")
                         .bold()
                     HStack {
@@ -41,6 +42,7 @@ struct ScorecardView: View {
                             .buttonStyle(.bordered)
                         }
                     }
+                    
                     Button {
                         gameVM.rewindGame()
                     } label: {

@@ -62,6 +62,7 @@ struct AddPlayersView: View {
             VStack(spacing: 10) {
                 Button("Add player") {
                     if playerName != "" {
+                        print(gameVM.players.count)
                         let newPlayer = Player(name: playerName, position: gameVM.players.count)
                         gameVM.players.append(newPlayer)
                         playerName = ""
