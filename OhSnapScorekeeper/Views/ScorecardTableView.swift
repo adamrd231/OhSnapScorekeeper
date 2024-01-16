@@ -8,16 +8,10 @@ struct ScorecardTableView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                ForEach(players, id: \.id) { player in
-                    PlayerNameView(
-                        playerName: player.name,
-                        isSelected: player.name == players[currentPosition].name
-                    )
-                }
-            }
-            .padding(.leading, 20)
-
+            PlayerNameRowView(
+                players: players,
+                currentPosition: currentPosition
+            )
             ScrollView {
                 HStack(spacing: 10) {
                     VStack(spacing: 10) {
@@ -47,22 +41,51 @@ struct ScorecardTableView: View {
                     }
                 }
             }
-            
-            HStack {
-                ForEach(players, id: \.id) { player in
-                    Text(player.totalScore, format: .number)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .font(.caption)
-                }
-      
-            }
-            .padding(.leading, 20)
+            TotalScoreRowView(players: players)
         }
         .padding()
     }
 }
 
 
+struct PlayerNameRowView: View {
+    let players: [Player]
+    let currentPosition: Int
+    
+    var body: some View {
+        HStack {
+            ForEach(players, id: \.id) { player in
+                PlayerNameView(
+                    playerName: player.name,
+                    isSelected: player.name == players[currentPosition].name
+                )
+            }
+        }
+        .padding(.leading, 20)
+    }
+}
+struct TotalScoreRowView: View {
+    let players: [Player]
+    var body: some View {
+        HStack {
+            ForEach(players, id: \.id) { player in
+                TotalScoreView(score: player.totalScore)
+            }
+  
+        }
+        .padding(.leading, 20)
+    }
+}
+
+struct TotalScoreView: View {
+    let score: Int
+    var body: some View {
+        Text(score, format: .number)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .font(.caption)
+            .fontWeight(.bold)
+    }
+}
 
 struct ScorecardTableView_Previews: PreviewProvider {
     static var previews: some View {

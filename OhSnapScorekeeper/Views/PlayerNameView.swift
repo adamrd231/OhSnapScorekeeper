@@ -13,7 +13,7 @@ struct PlayerNameView: View {
     var body: some View {
         Text(playerName)
             .frame(minWidth: 0, maxWidth: .infinity)
-            .font(.caption)
+            .font(.caption2)
             .foregroundColor(isSelected ? .blue : .black)
             .fontWeight(isSelected ? .bold : .regular)
     }

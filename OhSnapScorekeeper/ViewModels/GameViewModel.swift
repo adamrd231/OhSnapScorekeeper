@@ -114,6 +114,11 @@ class GameViewModel: ObservableObject {
         // Each player needs as many empty Round objects as there are rounds in calculcated round array
         for playerIndex in 0..<players.count {
             for _ in 0..<calculatedRoundArray.count {
+                players[playerIndex].rounds.removeAll()
+            }
+        }
+        for playerIndex in 0..<players.count {
+            for _ in 0..<calculatedRoundArray.count {
                 players[playerIndex].rounds.append(Round())
             }
         }

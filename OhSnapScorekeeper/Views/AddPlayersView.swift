@@ -29,13 +29,17 @@ struct AddPlayersView: View {
                     .background(Color.gray.opacity(0.15))
                 
                 List {
-                    ForEach(gameVM.players, id: \.id) { player in
+                    ForEach($gameVM.players, id: \.id) { $player in
                         if player.name != "Round" {
                             HStack {
-                                Text(player.position, format: .number)
+                                Text(player.position + 1, format: .number)
                                 Text(":")
-                                Text(player.name)
+                                TextField("Name", text: $player.name)
+                                    
+                                    
                             }
+                            .background(player.name == "" ? .red.opacity(0.5) : .clear)
+                            .cornerRadius(5)
                         }
                     }
                     .onDelete(perform: delete)
