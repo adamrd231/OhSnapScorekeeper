@@ -18,8 +18,18 @@ class GameViewModel: ObservableObject {
         return returnedArray
     }
     
-    @Published var currentRound: Int = 0
-    @Published var currentPosition: Int = 0
+    @Published var currentRound: Int = 0 {
+        willSet {
+            lastRound = currentRound
+        }
+    }
+    var lastRound = 0
+    @Published var currentPosition: Int = 0 {
+        willSet {
+            lastPosition = currentPosition
+        }
+    }
+    var lastPosition = 0
     @Published var dealerPosition: Int = 0
     
     private var cancellable = Set<AnyCancellable>()
@@ -42,45 +52,67 @@ class GameViewModel: ObservableObject {
         switch gameState {
         // Currently entering guesses
         case .enteringGuesses:
-            // If nothing guesses on row so far..
-
-            if players.filter({ $0.rounds[currentRound].predictedScore != nil }).count == 0 {
-                print("No entries")
+            // if not all the guesses have been deleted, just cycle back one position
+            print(players.filter({ $0.rounds[currentRound].predictedScore != nil }).count)
+            if players.filter({ $0.rounds[currentRound].predictedScore != nil }).count > 0 {
+                print("Guesses remaining")
+                if currentPosition - 1 < 0 {
+                    currentPosition = players.count - 1
+                    deleteEntry()
+                    
+                } else {
+                    currentPosition -= 1
+                    deleteEntry()
+                }
+                
+            } else {
+                print("No guesses left")
+                guard currentRound > 0 else { return }
                 currentRound -= 1
-                currentPosition = players.count - 1
+                currentPosition = lastPosition
                 gameState = .enteringActuals
                 deleteEntry()
 
-                dealerPosition -= 1
-                return
-            }
-            
-            
-            if currentPosition - 1 < 0 {
-                if currentRound - 1 < 0 {
-                    print("At the beginning")
+               
+                if dealerPosition - 1 < 0 {
+                    dealerPosition = players.count - 1
                 } else {
-                    currentRound -= 1
-                    currentPosition = players.count - 1
-                    gameState = .enteringActuals
-                    deleteEntry()
+                    dealerPosition -= 1
                 }
-            } else {
-                currentPosition -= 1
-                deleteEntry()
             }
+            
+            
+            
         // Currently entering a score
         case .enteringActuals:
-            print("Entering score")
-            if currentPosition - 1 < 0 {
-                gameState = .enteringGuesses
-                currentPosition = players.count - 1
+            // Check if deleting this score is the last score in the round
+            print("actual score count: \(players.filter({ $0.rounds[currentRound].actualScore != nil }).count)")
+            print("Player count \(players.count)")
+            if players.filter({ $0.rounds[currentRound].actualScore != nil}).count > 0 {
+                print("Scores remaining")
+                if currentPosition - 1 < 0 {
+                    currentPosition = players.count - 1
+                } else {
+                    currentPosition -= 1
+                }
+                deleteEntry()
+               
+   
             } else {
-                currentPosition -= 1
+                print("No scores remaining")
+                // switch back to guessing
+                gameState = .enteringGuesses
+                // go back one position
+                if currentPosition - 1 < 0 {
+                    currentPosition = players.count - 1
+ 
+                } else {
+                    currentPosition -= 1
+                }
+                // delete guess
+                deleteEntry()
             }
-            deleteEntry()
         }
-        
     }
     
     func updateGameState() {
@@ -95,10 +127,8 @@ class GameViewModel: ObservableObject {
     func deleteEntry() {
         switch gameState {
         case .enteringGuesses:
-            print("Delete guess")
             players[currentPosition].rounds[currentRound].predictedScore = nil
         case .enteringActuals:
-            print("Delete score")
             players[currentPosition].rounds[currentRound].actualScore = nil
         }
         
@@ -138,13 +168,10 @@ class GameViewModel: ObservableObject {
                     isGameRunning = false
                 } else {
                     currentRound += 1
-                    print("Dealer score: \(dealerPosition)")
                     // Update dealer position
                     if dealerPosition + 1 >= players.count {
-                        print("Dealer position 0")
                         dealerPosition = 0
                     } else {
-                        print("Add one to dealer position")
                         dealerPosition += 1
                     }
                     // Update current position with the correct starting place
@@ -160,6 +187,7 @@ class GameViewModel: ObservableObject {
                 }
             }
         }
+        updateGameState()
     }
     
     func prepGameScoreCard() {
