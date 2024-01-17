@@ -1,11 +1,23 @@
 import Foundation
-import Combine
 import SwiftUI
 
 class GameViewModel: ObservableObject {
-    var ohSnapGame = OhSnapGame()
-    
     @Published var players: [Player] = []
+    @Published var currentRound: Int = 0 {
+        willSet {
+            lastRound = currentRound
+        }
+    }
+    @Published var currentPosition: Int = 0 {
+        willSet {
+            lastPosition = currentPosition
+        }
+    }
+    @Published var dealerPosition: Int = 0
+    @Published var gameState: GameStates = .enteringGuesses
+    @Published var isGameRunning: Bool = true
+    var lastRound = 0
+    var lastPosition = 0
     var startingNumber: Int = 7
     var calculatedRoundArray: [Int] {
         var returnedArray:[Int] = []
@@ -17,25 +29,6 @@ class GameViewModel: ObservableObject {
         }
         return returnedArray
     }
-    
-    @Published var currentRound: Int = 0 {
-        willSet {
-            lastRound = currentRound
-        }
-    }
-    var lastRound = 0
-    @Published var currentPosition: Int = 0 {
-        willSet {
-            lastPosition = currentPosition
-        }
-    }
-    var lastPosition = 0
-    @Published var dealerPosition: Int = 0
-    
-    private var cancellable = Set<AnyCancellable>()
-    
-    @Published var gameState: GameStates = .enteringGuesses
-    @Published var isGameRunning: Bool = true
     
     func resetGame() {
         for index in 0..<players.count {
@@ -55,7 +48,6 @@ class GameViewModel: ObservableObject {
             // if not all the guesses have been deleted, just cycle back one position
             print(players.filter({ $0.rounds[currentRound].predictedScore != nil }).count)
             if players.filter({ $0.rounds[currentRound].predictedScore != nil }).count > 0 {
-                print("Guesses remaining")
                 if currentPosition - 1 < 0 {
                     currentPosition = players.count - 1
                     deleteEntry()
@@ -64,52 +56,34 @@ class GameViewModel: ObservableObject {
                     currentPosition -= 1
                     deleteEntry()
                 }
-                
             } else {
-                print("No guesses left")
                 guard currentRound > 0 else { return }
                 currentRound -= 1
                 currentPosition = lastPosition
                 gameState = .enteringActuals
                 deleteEntry()
-
-               
                 if dealerPosition - 1 < 0 {
                     dealerPosition = players.count - 1
                 } else {
                     dealerPosition -= 1
                 }
             }
-            
-            
-            
-        // Currently entering a score
+      
         case .enteringActuals:
-            // Check if deleting this score is the last score in the round
-            print("actual score count: \(players.filter({ $0.rounds[currentRound].actualScore != nil }).count)")
-            print("Player count \(players.count)")
             if players.filter({ $0.rounds[currentRound].actualScore != nil}).count > 0 {
-                print("Scores remaining")
                 if currentPosition - 1 < 0 {
                     currentPosition = players.count - 1
                 } else {
                     currentPosition -= 1
                 }
                 deleteEntry()
-               
-   
             } else {
-                print("No scores remaining")
-                // switch back to guessing
                 gameState = .enteringGuesses
-                // go back one position
                 if currentPosition - 1 < 0 {
                     currentPosition = players.count - 1
- 
                 } else {
                     currentPosition -= 1
                 }
-                // delete guess
                 deleteEntry()
             }
         }
@@ -204,22 +178,6 @@ class GameViewModel: ObservableObject {
         }
 
     }
-    
-    var isRoundStarted: Bool {
-        return players[currentPosition].rounds.count >= currentPosition
-    }
-    
-
 }
 
-enum GameStates {
-    case enteringGuesses
-    case enteringActuals
-    
-    var description: String {
-        switch self {
-        case .enteringGuesses: return "Guessing"
-        case .enteringActuals: return "Actuals"
-        }
-    }
-}
+
