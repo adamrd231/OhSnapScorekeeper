@@ -92,8 +92,8 @@
 		668276242B446E7700B5B548 /* OhSnapScorekeeper */ = {
 			isa = PBXGroup;
 			children = (
-				664F0BD42B588677002D1E2A /* States */,
 				668276252B446E7700B5B548 /* OhSnapScorekeeperApp.swift */,
+				664F0BD42B588677002D1E2A /* States */,
 				667FAC152B45C3EB004615C8 /* Extensions */,
 				6682763E2B44AABE00B5B548 /* ViewModels */,
 				668276412B44AB3D00B5B548 /* Views */,
